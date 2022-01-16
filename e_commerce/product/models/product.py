@@ -31,10 +31,13 @@ class Product(models.Model):
             return 'http://127.0.0.1:8000'+self.thumbnail.url
         else:
             img = Image.open(self.image) # load a PIL image instance from the image
-            img.thumbnail((150,150)) # resize image
+            img.thumbnail((200,200)) # resize image
             thumb = BytesIO() # create a BytesIO file-like object to store
             img.save(thumb, 'JPEG', quality=85)
             self.thumbnail = File(thumb, name=self.image.name)
             self.save()
 
             return 'http://127.0.0.1:8000'+self.thumbnail.url
+
+    def get_product_url(self):
+        return f'/{self.category.name}/{self.name}/'

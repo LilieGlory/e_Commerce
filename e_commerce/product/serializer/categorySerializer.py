@@ -9,5 +9,6 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = (
             "name",
-            "category_s_product"
+            "get_category_url",
+            "category_s_product",
         )
