@@ -1,9 +1,10 @@
 from django.urls import include, path
 
-from product import views
+from product.views.productView import ProductList, ProductDetail
+from product.views.categoryView import CategoryDetail, CategoryForm
 
 urlpatterns = [
-    path('product-list/', views.ProductList.as_view()),
-    path('product-category/<slug:category_name>/', views.CategoryDetail.as_view()),
-    path('product-detail/<slug:category_name>/<slug:product_name>/', views.ProductDetail.as_view()),
+    path('product-list/', ProductList.as_view()),
+    path('category/<slug:category_name>/', CategoryDetail.as_view()),
+    path('product-detail/<slug:category_name>/<slug:product_name>/', ProductDetail.as_view()),
 ]
