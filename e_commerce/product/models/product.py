@@ -1,7 +1,6 @@
 from django.db import models
 from django.db.models.deletion import CASCADE
-
-from .category import Category
+from product.models.category import Category
 from io import BytesIO
 from PIL import Image # thumbnail (resize an image)
 from django.core.files import File
@@ -16,7 +15,7 @@ class Product(models.Model):
     thumbnail = models.ImageField(upload_to= 'images/', blank=True, null= True)
     price = models.DecimalField(max_digits= 12, decimal_places=2)
     date = models.DateField(auto_now_add= True) # date d'ajout
-    product_number = models.IntegerField(default=1)
+    product_number = models.PositiveIntegerField(default=1)
 
     class Meta:
         ordering= ['-date']

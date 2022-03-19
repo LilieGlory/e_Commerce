@@ -1,8 +1,11 @@
-import product
+from django.shortcuts import redirect
 from product.models.product import Product
-from product.serializer.productSerializer import ProductSerializer
+from product.serializer.productSerializer import ProductSerializer, ProductCreateSerializer
+from product.forms.productForm import ProductForm
+
 from django.db.models import Q
-from django.http import Http404
+from django.template import loader
+from django.http import Http404, HttpResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
@@ -19,9 +22,16 @@ class ProductList(APIView):
         # return Response(serializer.data)
         return Response({'products': serializer.data})
 
+    def post(self, request):
+        new_product = ProductCreateSerializer(data = request.data)
+        if new_product.is_valid(raise_exception=True):
+            #category_saved = new_category.save()
+            return Response("ok")
+        return Response("ok")
+
 class ProductDetail(APIView):
-    # renderer_classes = [TemplateHTMLRenderer]
-    # template_name = 'product/product-detail.html'
+    #renderer_classes = [TemplateHTMLRenderer]
+    #template_name = 'product/product-detail.html'
 
     def get_object(self, product_name, category_name):
         try:
@@ -34,3 +44,18 @@ class ProductDetail(APIView):
         serializer = ProductSerializer(product_research)
         return Response(serializer.data)
         # return Response({'product' : serializer.data})
+
+class CreateNewProduct():
+    def index(request):
+        if request.method == "POST":
+            form = ProductForm(request.POST, request.FILES)
+            if form.is_valid():
+                return HttpResponse("mety")
+        else:
+            form = ProductForm()
+        
+        template = loader.get_template('product/category.html')
+        context = {
+            "form" : form
+        }
+        return HttpResponse(template.render(context,request))
