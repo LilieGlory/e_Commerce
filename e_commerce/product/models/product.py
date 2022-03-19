@@ -1,7 +1,6 @@
 from django.db import models
 from django.db.models.deletion import CASCADE
-
-from .category import Category
+from product.models.category import Category
 from io import BytesIO
 from PIL import Image # thumbnail (resize an image)
 from django.core.files import File
@@ -9,19 +8,20 @@ from django.core.files import File
 # Products model
 class Product(models.Model):
     category = models.ForeignKey(Category, on_delete= models.CASCADE, related_name= "category_s_product")
-    name = models.CharField(max_length= 50)
+    product_name = models.CharField(max_length= 50)
     slug = models.SlugField()
     description = models.TextField(blank= True, null= True)
     image = models.ImageField(upload_to= 'images/')
     thumbnail = models.ImageField(upload_to= 'images/', blank=True, null= True)
     price = models.DecimalField(max_digits= 12, decimal_places=2)
     date = models.DateField(auto_now_add= True) # date d'ajout
+    product_number = models.PositiveIntegerField(default=1)
 
     class Meta:
         ordering= ['-date']
 
     def __str__(self):
-        return self.name
+        return self.product_name
 
     def get_image(self):
         return 'http://127.0.0.1:8000'+self.image.url
@@ -40,4 +40,6 @@ class Product(models.Model):
             return 'http://127.0.0.1:8000'+self.thumbnail.url
 
     def get_product_url(self):
-        return f'/{self.category.name}/{self.name}/'
+        # return f'/{self.category.category_name}/{self.product_name}/'
+        url = f'/{self.category.category_name}/{self.product_name}/'
+        return 'http://127.0.0.1:8000/api/product-detail'+url
