@@ -1,5 +1,4 @@
 from django.db import models
-from django.db.models.deletion import CASCADE
 from product.models.category import Category
 from io import BytesIO
 from PIL import Image # thumbnail (resize an image)
@@ -16,6 +15,7 @@ class Product(models.Model):
     price = models.DecimalField(max_digits= 12, decimal_places=2)
     date = models.DateField(auto_now_add= True) # date d'ajout
     product_number = models.PositiveIntegerField(default=1)
+    owner = models.ForeignKey('auth.user', on_delete= models.CASCADE, related_name = "owner_product")
 
     class Meta:
         ordering= ['-date']
